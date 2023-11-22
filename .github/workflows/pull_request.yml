@@ -1,26 +1,26 @@
 ---
-name: Docker Image
+name: Pull Request
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
     types: [ opened, synchronize, closed ]
 
 jobs:
-  # build:
-  #   # if: github.event.pull_request.merged == false
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+  build:
+    name: Docker image
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Build Docker image
-  #       run: docker build . --file Dockerfile
+      - name: Build Docker image
+        run: docker build . --file Dockerfile
 
   publish:
-    # if: github.event.pull_request.merged == true
+    name: Release experimental Docker image
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,4 +33,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          tags: latest
+          tags: experimental
