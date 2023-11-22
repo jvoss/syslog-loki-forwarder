@@ -1,0 +1,32 @@
+server:
+  disable: true
+
+clients:
+  - url: https://loki.somedomain.com/loki/api/v1/push
+
+scrape_configs:
+  - job_name: syslog_tcp
+    syslog:
+      idle_timeout: 60s
+      label_structured_data: true
+      labels:
+        job: syslog
+      listen_address: "0.0.0.0:1514"
+      listen_protocol: tcp
+    relabel_configs:
+      - source_labels:
+          - __syslog_message_hostname
+        target_label: instance
+
+  - job_name: syslog_udp
+    syslog:
+      idle_timeout: 60s
+      label_structured_data: true
+      labels:
+        job: syslog
+      listen_address: "0.0.0.0:1514"
+      listen_protocol: udp
+    relabel_configs:
+      - source_labels:
+          - __syslog_message_hostname
+        target_label: instance
