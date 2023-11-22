@@ -1,6 +1,6 @@
 FROM grafana/promtail:latest
 
-RUN apt update && apt install -y rsyslog
+RUN apt update && apt install --no-install-recommends --yes rsyslog
 RUN apt-get clean
 
 COPY rsyslog.conf /etc/rsyslog.conf
